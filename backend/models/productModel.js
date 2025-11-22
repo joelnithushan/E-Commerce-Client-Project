@@ -39,20 +39,22 @@ const productSchema = new mongoose.Schema({
     required: [true, "Please enter product stock"],
     default: 1,
   },
-  reviews: {
-    name: {
-      type: String,
-      required: true,
+  reviews: [
+    {
+      name: {
+        type: String,
+        required: true,
+      },
+      rating: {
+        type: Number,
+        required: true,
+      },
+      Comment: {
+        type: String,
+        required: true,
+      },
     },
-    rating: {
-      type: Number,
-      required: true,
-    },
-    Comment: {
-      type: String,
-      required: true,
-    },
-  },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
