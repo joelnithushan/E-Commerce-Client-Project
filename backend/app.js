@@ -14,8 +14,11 @@ const app=express();
 app.use(express.json());
 
 
+//routes
 app.use("/api/v1/",product);
 
+
+//always on bottom to avoid uncatched errors
 app.use(errorHandler);
 
 export default app;
