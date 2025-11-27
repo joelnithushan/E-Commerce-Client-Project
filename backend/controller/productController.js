@@ -1,5 +1,6 @@
 import Product from "../models/productModel.js";
-import errorHandler from "../helper/handleError.js"
+import errorHandler from "../helper/handleError.js";
+import APIHelper from "../helper/APIHelper.js";
 
 //create products
 
@@ -13,7 +14,7 @@ export const addProducts = async (req, res) => {
 };
 
 //update product
-export const updateProduct = async (req, res,next) => {
+export const updateProduct = async (req, res, next) => {
   const id = await req.params.id;
   let product = await Product.findByIdAndUpdate(id, req.body, {
     new: true,
@@ -22,19 +23,19 @@ export const updateProduct = async (req, res,next) => {
 
   if (!product) {
     //return res.status(500).json({ success: false, message: "Product not found" });
-    return next(new errorHandler("Product not found",404));
+    return next(new errorHandler("Product not found", 404));
   }
   return res.status(200).json({ success: true, product });
 };
 
 //delete product
-export const deleteProduct = async (req,res,next) => {
+export const deleteProduct = async (req, res, next) => {
   const id = await req.params.id;
   let product = await Product.findByIdAndDelete(id);
 
   if (!product) {
     //return res.status(500).json({ success: false, message: "Product not found" });
-    return next(new errorHandler("Product not found",404));
+    return next(new errorHandler("Product not found", 404));
   }
   return res
     .status(200)
@@ -42,8 +43,12 @@ export const deleteProduct = async (req,res,next) => {
 };
 
 //get all products from db
+//http://localhost:8000/api/v1/products?keyword=Coffee
 export const getAllProducts = async (req, res) => {
-  const products = await Product.find();
+  //const products = await Product.find();
+  const apiHelper = new APIHelper(Product.find(), req.query).search();
+  console.log(apiHelper);
+  const products = await apiHelper.query;
   res.status(200).json({
     success: true,
     products,
@@ -51,12 +56,12 @@ export const getAllProducts = async (req, res) => {
 };
 
 //get single product from db
-export const getSingleProduct = async (req, res,next) => {
+export const getSingleProduct = async (req, res, next) => {
   const id = await req.params.id;
   let product = await Product.findById(id);
   if (!product) {
     //return res.status(500).json({ success: false, message: "Product not found" });
-    return next(new errorHandler("Product not found",404));
+    return next(new errorHandler("Product not found", 404));
   }
   return res.status(200).json({ success: true, product });
 };
