@@ -46,8 +46,7 @@ export const deleteProduct = async (req, res, next) => {
 //http://localhost:8000/api/v1/products?keyword=Coffee
 export const getAllProducts = async (req, res) => {
   //const products = await Product.find();
-  const apiHelper = new APIHelper(Product.find(), req.query).search();
-  console.log(apiHelper);
+  const apiHelper = new APIHelper(Product.find(), req.query).search().filter();
   const products = await apiHelper.query;
   res.status(200).json({
     success: true,

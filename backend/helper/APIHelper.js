@@ -18,7 +18,14 @@ class APIHelper {
     return this;
   }
 
-  filter() {}
+  filter() {
+    const queryCopy = { ...this.queryStr };
+    const removeField = ["keyword", "page", "limit"];
+    removeField.forEach((key) => delete queryCopy[key]);
+    this.query=this.query.find(queryCopy);
+    return this;
+    
+  }
   pagination() {}
 }
 
