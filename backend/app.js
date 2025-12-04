@@ -6,6 +6,7 @@ module.exports=app;
 
 import express from "express";
 import product from "./routes/productRoutes.js";
+import user from "./routes/userRoutes.js"
 import errorHandler from "./middleware/error.js";
 
 const app=express();
@@ -16,6 +17,7 @@ app.use(express.json());
 
 //routes
 app.use("/api/v1/",product);
+app.use("/api/v1/",user);
 
 
 //always on bottom to avoid uncatched errors

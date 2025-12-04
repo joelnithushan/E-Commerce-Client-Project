@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
-import validator, { isPassportNumber, isStrongPassword } from "validator";
+import validator from "validator";
+import bcryptjs from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema(
   {
@@ -16,13 +18,13 @@ const userSchema = new mongoose.Schema(
       ],
     },
     email: {
-      type: email,
+      type: String,
       required: [true, "Please enter yoru email adress"],
       unique: true,
       validate: [validator.isEmail, "Please enter valid email address"],
     },
     password: {
-      type: password,
+      type: String,
       required: [true, "Please Enter Your Password"],
       minLength: [8, "Password should be grater than 8 characters"],
       select: false,
@@ -39,12 +41,27 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "User",
+      default: "user",
     },
     resetPasswordToken: String,
-    resetPAsswordExpire: Date,
+    resetPasswordExpire: Date,
   },
   { timestamps: true }
 );
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+
+  this.password = await bcryptjs.hash(this.password, 10);
+  //next();
+});
+
+userSchema.methods.getJwtToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+};
 
 export default mongoose.model("User", userSchema);
