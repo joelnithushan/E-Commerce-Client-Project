@@ -6,6 +6,7 @@ import APIHelper from "../helper/APIHelper.js";
 
 export const addProducts = async (req, res) => {
   //console.log(res.body);
+  req.body.user = req.user._id;
   const product = await Product.create(req.body);
   res.status(201).json({
     success: true,
@@ -15,7 +16,7 @@ export const addProducts = async (req, res) => {
 
 //update product
 export const updateProduct = async (req, res, next) => {
-  const id = await req.params.id;
+  const id = req.params.id;
   let product = await Product.findByIdAndUpdate(id, req.body, {
     new: true,
     runValidators: true,
@@ -30,7 +31,7 @@ export const updateProduct = async (req, res, next) => {
 
 //delete product
 export const deleteProduct = async (req, res, next) => {
-  const id = await req.params.id;
+  const id = req.params.id;
   let product = await Product.findByIdAndDelete(id);
 
   if (!product) {
@@ -73,7 +74,7 @@ export const getAllProducts = async (req, res, next) => {
 
 //get single product from db
 export const getSingleProduct = async (req, res, next) => {
-  const id = await req.params.id;
+  const id = req.params.id;
   let product = await Product.findById(id);
   if (!product) {
     //return res.status(500).json({ success: false, message: "Product not found" });

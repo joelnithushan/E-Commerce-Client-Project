@@ -14,19 +14,19 @@ const userSchema = new mongoose.Schema(
       ],
       minLength: [
         3,
-        "Invalid name, Please enter name with grater than 3 characters",
+        "Invalid name, Please enter name with greater than 3 characters",
       ],
     },
     email: {
       type: String,
-      required: [true, "Please enter yoru email adress"],
+      required: [true, "Please enter your email address"],
       unique: true,
       validate: [validator.isEmail, "Please enter valid email address"],
     },
     password: {
       type: String,
       required: [true, "Please Enter Your Password"],
-      minLength: [8, "Password should be grater than 8 characters"],
+      minLength: [8, "Password should be greater than 8 characters"],
       select: false,
     },
     avatar: {

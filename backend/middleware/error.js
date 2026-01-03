@@ -7,8 +7,10 @@ export default (err, req, res, next) => {
   //Duplicate key error
   if (err.code == 11000) {
     //console.log(Object.keys(err.keyValue))
-    const message = `This ${Object.keys(err.keyValue)} is aleady registerd`;
-    err=new HandleError(message,400);
+    const message = `This ${Object.keys(err.keyValue)} is already registered`;
+    err = new HandleError(message, 400);
+    err.statusCode = 400;
+    err.message = message;
   }
   res.status(err.statusCode).json({
     success: false,
